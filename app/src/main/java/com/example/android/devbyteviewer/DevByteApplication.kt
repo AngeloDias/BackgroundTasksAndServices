@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit
  * Override application to setup background work via WorkManager
  */
 class DevByteApplication : Application() {
-    private val applicationScope = CoroutineScope(Dispatchers.Default)
+    val applicationScope = CoroutineScope(Dispatchers.Default)
 
     private fun delayedInit() = applicationScope.launch {
         setupRecurringWork()

@@ -100,6 +100,7 @@ class DevByteFragment : Fragment() {
         // Set the lifecycleOwner so DataBinding can observe LiveData
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+
         viewModelAdapter = DevByteAdapter(VideoClick {
             // When a video is clicked this block or lambda will be called by DevByteAdapter
 
@@ -109,7 +110,6 @@ class DevByteFragment : Fragment() {
 
             // Try to generate a direct intent to the YouTube app
             var intent = Intent(Intent.ACTION_VIEW, it.launchUri)
-
             if(intent.resolveActivity(packageManager) == null) {
                 // YouTube app isn't found, use the web url
                 intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.url))
