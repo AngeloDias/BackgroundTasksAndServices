@@ -180,6 +180,10 @@ class DevByteAdapter(val callback: VideoClick) : RecyclerView.Adapter<DevByteVie
         return DevByteViewHolder(withDataBinding)
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     override fun getItemCount() = videos.size
 
     /**
