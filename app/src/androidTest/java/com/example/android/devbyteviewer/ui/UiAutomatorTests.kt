@@ -16,7 +16,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @RunWith(AndroidJUnit4::class)
 class UiAutomatorTests {
     @get:Rule
@@ -46,7 +45,7 @@ class UiAutomatorTests {
 
     @Test
     @Throws(UiObjectNotFoundException::class)
-    fun checkSettings() {
+    fun checkDevByteApp() {
         // Simulate a short press on the HOME button.
         uiDevice.pressHome()
 
@@ -65,10 +64,10 @@ class UiAutomatorTests {
         // the Apps tab. To simulate the user bringing up the Apps tab,
         // we create a UiSelector to find a tab with the text
         // label “Apps”.
-        val appsTab: UiObject = uiDevice.findObject(UiSelector().text("Apps"))
+//        val appsTab: UiObject = uiDevice.findObject(UiSelector().text("Apps"))
 
         // Simulate a click to enter the Apps tab.
-        appsTab.click()
+//        appsTab.click()
 
         // Next, in the apps tabs, we can simulate a user swiping until
         // they come to the Settings app icon. Since the container view
@@ -84,7 +83,7 @@ class UiAutomatorTests {
         val devByteViewerApp = appViews
                 .getChildByText(UiSelector()
                         .className(TextView::class.java.name),
-                        Resources.getSystem().getString(R.string.app_name))
+                        activityRule.activity.resources.getString(R.string.app_name))
         devByteViewerApp.clickAndWaitForNewWindow()
 
         // Validate that the package name is the expected one
@@ -95,5 +94,21 @@ class UiAutomatorTests {
                 )
 
         assertThat(devByteViewerValidation.exists(), equalTo(true))
+
+        val recyclerView = uiDevice.findObject(
+                UiSelector()
+                        .className("androidx.recyclerview.widget.RecyclerView"))
+
+        recyclerView.swipeDown(7)
+
+        val frameToClick = uiDevice.findObject(
+                UiSelector()
+                        .className("android.widget.FrameLayout")
+                        .childSelector(
+                                UiSelector().className("android.view.ViewGroup")
+                        ))
+
+        frameToClick.click()
     }
+
 }
