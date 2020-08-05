@@ -2,7 +2,6 @@ package com.example.android.devbyteviewer.ui
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -72,7 +71,7 @@ class UiAutomatorTests {
         // Next, in the apps tabs, we can simulate a user swiping until
         // they come to the Settings app icon. Since the container view
         // is scrollable, we can use a UiScrollable object.
-        val appViews = UiScrollable(
+        var appViews = UiScrollable(
                 UiSelector().scrollable(true))
 
         // Set the swiping mode to horizontal (the default is vertical)
@@ -108,7 +107,37 @@ class UiAutomatorTests {
                                 UiSelector().className("android.view.ViewGroup")
                         ))
 
-        frameToClick.click()
+        frameToClick.clickAndWaitForNewWindow()
+        uiDevice.pressHome()
+        uiDevice.findObject(UiSelector().description("Apps"))
+                .clickAndWaitForNewWindow()
+
+        appViews = UiScrollable(UiSelector().scrollable(true))
+                .setAsVerticalList()
+
+        val sleepTracker = appViews
+                .getChildByText(
+                        UiSelector()
+                                .className(TextView::class.java.name),
+                        "Track My Sleep Quality")
+
+        sleepTracker.clickAndWaitForNewWindow()
+
+        var stopButton = uiDevice.findObject(UiSelector().text("STOP"))
+
+        assertThat(stopButton.isEnabled, equalTo(false))
+
+        val startButton = uiDevice.findObject(UiSelector().text("START"))
+
+        startButton.clickAndWaitForNewWindow()
+        assertThat(startButton.isEnabled, equalTo(false))
+
+        stopButton = uiDevice.findObject(UiSelector().text("STOP"))
+
+        stopButton.clickAndWaitForNewWindow()
+        uiDevice.findObject(UiSelector().description("Sleep Quality 0"))
+                .clickAndWaitForNewWindow()
+        uiDevice.findObject(UiSelector().text("CLEAR")).clickAndWaitForNewWindow()
     }
 
 }
